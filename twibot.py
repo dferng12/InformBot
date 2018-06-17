@@ -85,8 +85,12 @@ if __name__ == '__main__':
 				media_url = media[0]['media_url_https']
 				fetch_image(media_url)
 				mediaToPost = 'foto.jpg'
-			else:
+			elif media_type == 'animated_gif':
 				media_url = media[0]['video_info']['variants'][0]['url']
+				fetch_gifVideo(media_url)
+				mediaToPost = 'video.mp4'
+			elif media_type == 'video':
+				media_url = media[0]['video_info']['variants'][1]['url']
 				fetch_gifVideo(media_url)
 				mediaToPost = 'video.mp4'
 
