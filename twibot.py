@@ -20,14 +20,15 @@ def fetch_image(media_url):
 	img = Image.open(file)
 	img.save('foto.jpg')
 
+
 def get_real_text(prevText):
 	
 	text = prevText
-
 	#Deleting media links from tweet
 	while prevText.find('https://t.co') != -1:
 		start_index = prevText.find('https://t.co')
 		prevText = prevText[:start_index]
+
 
 	#Check if the only text of the message was the media link
 	text = prevText
@@ -39,12 +40,7 @@ def get_real_text(prevText):
 	return text
 
 def fetch_gifVideo(media_url):
-	video = oauth_req(media_url, 'GET') 
-
-	file_name = 'video.mp4'
-	file = open(file_name,'wb')
-	file.write(video)
-	file.close()
+	urllib.urlretrieve(media_url, 'video.mp4')
 
 if __name__ == '__main__':
 	current = 0
@@ -74,8 +70,6 @@ if __name__ == '__main__':
 		prevText = messages[current]['text']
 		mediaToPost = ""
 
-		text = get_real_text(prevText)
-
 		#Url from media
 		try:
 			media = messages[current]['entities']['media']
@@ -96,6 +90,11 @@ if __name__ == '__main__':
 
 		except KeyError:
 			pass
+
+		if mediaToPost != "":
+			text = get_real_text(prevText)
+		else:
+			text = prevText
 
 		api.PostUpdate(status=text, media=mediaToPost)
 
